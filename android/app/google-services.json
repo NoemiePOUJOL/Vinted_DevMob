@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1093059810955",
+    "project_id": "flutterproject-b522d",
+    "storage_bucket": "flutterproject-b522d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093059810955:android:67689900175e16af39668e",
+        "android_client_info": {
+          "package_name": "com.DevMobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFO3OUGwk5fxIZ_BrTaUwnTykRBjMM0L0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
