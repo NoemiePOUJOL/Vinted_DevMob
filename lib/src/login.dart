@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_project/src/auth_service.dart';
 import 'auth_service.dart';
 
+// Classe LoginPage pour la connexion de l'utilisateur
 class LoginPage extends StatefulWidget {
   final VoidCallback onLoginSuccess;
 
@@ -13,51 +14,55 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _idController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final _formKey = GlobalKey<FormState>(); 
+  final TextEditingController _idController = TextEditingController(); // Contrôleur pour le champ identifiant
+  final TextEditingController _passwordController = TextEditingController(); // Contrôleur pour le champ mot de passe
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance; // Instance de Firestore
 
+  // Méthode pour gérer la connexion de l'utilisateur
   Future<void> _login() async {
     final id = _idController.text;
     final password = _passwordController.text;
 
     if (_formKey.currentState!.validate()) {
       try {
-        // Recherche de l'utilisateur dans Firestore
+        // Recherche dans Firestore
         QuerySnapshot querySnapshot = await _firestore
             .collection('users')
             .where('id', isEqualTo: id)
             .limit(1)
             .get();
 
-
         if (querySnapshot.docs.isNotEmpty) {
           var userDoc = querySnapshot.docs.first;
 
-          // Vérifiez si le mot de passe correspond
+          // Vérifier si le mot de passe correspond
           if (userDoc['password'] == password) {
-
+            // Stockage de l'identifiant et du mot de passe dans AuthService
             AuthService().id = id;
             AuthService().password = password;
             print(AuthService().id);
-            // Connexion réussie
+
+            // Cas où la connexion est réussie
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Connexion réussie')),
             );
-            // Appel de la fonction de rappel
+
             widget.onLoginSuccess();
           } else {
+            // Cas mot de passe incorrect
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Mot de passe incorrect')),
             );
           }
         } else {
+          // Cas utilisateur introuvable
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Utilisateur introuvable')),
           );
         }
       } catch (e) {
+        // Gestion des erreurs de connexion
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Erreur de connexion : $e')),
         );
@@ -67,7 +72,10 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+
+      //Elements de l'app bar
       appBar: AppBar(
         title: const Center(
           child: Text(
@@ -77,6 +85,8 @@ class LoginPageState extends State<LoginPage> {
         ),
         backgroundColor: const Color.fromARGB(255, 169, 122, 219),
       ),
+
+      //Elements relatifs au formulaire de connexion
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.all(20),
@@ -84,6 +94,8 @@ class LoginPageState extends State<LoginPage> {
             key: _formKey,
             child: Column(
               children: [
+
+                // Champ pour l'identifiant
                 Container(
                   margin: const EdgeInsets.only(bottom: 16),
                   child: TextFormField(
@@ -101,6 +113,8 @@ class LoginPageState extends State<LoginPage> {
                     },
                   ),
                 ),
+
+                // Champ pour le mot de passe
                 Container(
                   margin: const EdgeInsets.only(bottom: 16),
                   child: TextFormField(
@@ -119,6 +133,8 @@ class LoginPageState extends State<LoginPage> {
                     },
                   ),
                 ),
+
+                // Bouton pour valider le formulaire de connexion
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(

@@ -1,6 +1,8 @@
+//Class pour gérer l'authentification de l'utilisateur
 class AuthService {
   static final AuthService _instance = AuthService._internal();
 
+  // Pour stocker l'identifiant et le mot de passe de l'utilisateur
   String? id;
   String? password;
 
@@ -9,10 +11,10 @@ class AuthService {
   }
 
   Future<void> signOut() async {
-    // Logique pour déconnecter l'utilisateur
+    // Pour déconnecter l'utilisateur on réinitialise les valeurs de l'identifiant et du mot de passe
     id = null;
     password = null;
   }
-
+  
   AuthService._internal();
 }

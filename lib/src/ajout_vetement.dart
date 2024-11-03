@@ -11,6 +11,7 @@ class AjouterVetementPage extends StatefulWidget {
 
 class _AjouterVetementPageState extends State<AjouterVetementPage> {
   final _formKey = GlobalKey<FormState>();
+  // Contrôleurs pour les champs de texte relatifs aux données du vêtement
   final TextEditingController _imageController = TextEditingController();
   final TextEditingController _titreController = TextEditingController();
   final TextEditingController _categorieController = TextEditingController();
@@ -18,9 +19,11 @@ class _AjouterVetementPageState extends State<AjouterVetementPage> {
   final TextEditingController _marqueController = TextEditingController();
   final TextEditingController _prixController = TextEditingController();
 
+  // Méthode pour ajouter un vêtement à Firestore
   Future<void> _ajouterVetement() async {
     if (_formKey.currentState!.validate()) {
       try {
+        // Ajouter le vêtement à la collection Firestore 'clothes'
         await FirebaseFirestore.instance.collection('clothes').add({
           'image': _imageController.text,
           'titre': _titreController.text,
@@ -51,6 +54,8 @@ class _AjouterVetementPageState extends State<AjouterVetementPage> {
           key: _formKey,
           child: Column(
             children: [
+
+              // Champs de texte pour l'image du vetement 
               TextFormField(
                 controller: _imageController,
                 decoration: const InputDecoration(labelText: 'Image URL'),
@@ -61,6 +66,8 @@ class _AjouterVetementPageState extends State<AjouterVetementPage> {
                   return null;
                 },
               ),
+
+              // Champs de texte pour le titre du vetement
               TextFormField(
                 controller: _titreController,
                 decoration: const InputDecoration(labelText: 'Titre'),
@@ -71,11 +78,15 @@ class _AjouterVetementPageState extends State<AjouterVetementPage> {
                   return null;
                 },
               ),
+
+              // Champs de texte pour la catégorie du vetement
               TextFormField(
                 controller: _categorieController,
                 decoration: const InputDecoration(labelText: 'Catégorie'),
                 
               ),
+
+              // Champs de texte pour la taille du vetement
               TextFormField(
                 controller: _tailleController,
                 decoration: const InputDecoration(labelText: 'Taille'),
@@ -86,6 +97,8 @@ class _AjouterVetementPageState extends State<AjouterVetementPage> {
                   return null;
                 },
               ),
+
+              // Champs de texte pour la marque du vetement
               TextFormField(
                 controller: _marqueController,
                 decoration: const InputDecoration(labelText: 'Marque'),
@@ -96,11 +109,13 @@ class _AjouterVetementPageState extends State<AjouterVetementPage> {
                   return null;
                 },
               ),
+
+              // Champs de texte pour le prix du vetement
               TextFormField(
                 controller: _prixController,
                 decoration: const InputDecoration(labelText: 'Prix'),
                 keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly], //uniquement des chiffres
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Veuillez entrer le prix';
@@ -108,6 +123,8 @@ class _AjouterVetementPageState extends State<AjouterVetementPage> {
                   return null;
                 },
               ),
+
+              // Bouton pour valider l'ajout du vetement
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _ajouterVetement,

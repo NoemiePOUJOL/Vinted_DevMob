@@ -12,21 +12,22 @@ class ListeVetementsPage extends StatefulWidget {
 }
 
 class _ListeVetementsPageState extends State<ListeVetementsPage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 0; // Index de l'élément sélectionné dans la barre de navigation
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  List<DocumentSnapshot>? _vetements;
+  List<DocumentSnapshot>? _vetements; // Liste des vêtements récupérés depuis Firestore
 
   @override
   void initState() {
     super.initState();
-    _fetchVetements();
+    _fetchVetements(); // Récupérer les vêtements à l'initialisation  
   }
 
+  // Méthode pour récupérer les vêtements depuis Firestore
   Future<void> _fetchVetements() async {
     try {
       QuerySnapshot snapshot = await _firestore.collection('clothes').get();
       setState(() {
-        _vetements = snapshot.docs;
+        _vetements = snapshot.docs; //Stocker les vêtements 
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -35,21 +36,27 @@ class _ListeVetementsPageState extends State<ListeVetementsPage> {
     }
   }
 
+  // Méthode pour gérer la navigation
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
 
     switch (index) {
-      case 0: // Acheter
+      // Cas où l'élément sélectionné est Acheter
+      case 0: 
         break;
-      case 1: // Panier
+
+      // Cas où l'élément sélectionné est Panier
+      case 1: 
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const PanierPage()),
         );
         break;
-      case 2: // Profil
+      
+      // Cas où l'élément sélectionné est Profil
+      case 2: 
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ProfilUserPage()),
@@ -58,17 +65,15 @@ class _ListeVetementsPageState extends State<ListeVetementsPage> {
     }
   }
 
+  // Méthode pour construire un ListTile à partir d'un DocumentSnapshot
   Widget _buildListTile(DocumentSnapshot vetement) {
+
     // Extraction des données du document
     final data = vetement.data() as Map<String, dynamic>;
     final image = data['image'] ?? '';
     final titre = data['titre'] ?? 'Titre inconnu';
     final taille = data['taille'] ?? 'Taille inconnue';
     final prix = data['prix']?.toString() ?? 'Prix inconnu';
-
-    print(data['prix']?.toString() );
-
-    print(data['titre']?.toString() );
 
     return ListTile(
       leading: Image.network(image),
@@ -77,10 +82,11 @@ class _ListeVetementsPageState extends State<ListeVetementsPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text('Taille: $taille'),
-          Text('Prix: $prix €'), // Affiche le prix
+          Text('Prix: $prix €'), 
         ],
       ),
       onTap: () {
+        // Naviguer vers la page de détail du vêtement
         Navigator.push(
           context,
           MaterialPageRoute(
